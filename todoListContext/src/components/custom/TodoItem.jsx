@@ -1,30 +1,32 @@
-import React from 'react'
-import { Checkbox } from '../ui/checkbox'
-import { Button } from '../ui/button'
+import React, { useContext } from 'react';
+import { Checkbox } from '../ui/checkbox';
+import { Button } from '../ui/button';
+import TodoContext from '@/context/TodoContext';
 
-function TodoItem({todo}) {
+function TodoItem({ todo }) {
+  const { dispatch } = useContext(TodoContext);
+
   return (
-    <div className='flex items-center justify-between p-4  border-b-2'>
-        <div className='items-center'>
+    <div className="flex items-center justify-between p-4 border-b border-gray-300">
+      <div className="flex items-center">
         <Checkbox
-            
-            />
-            <span className='ml-2'>
-                {todo.text}
-            </span>
-        </div>
-
-        <Button
+          checked={todo.completed}
+          onClick={() => dispatch({ type: 'TOGGLE_TODO', payload: todo.id })}
+          className="mr-2"
+        />
+        <span className={todo.completed ? 'line-through text-gray-500' : 'text-gray-800'}>
+          {todo.text}
+        </span>
+      </div>
+      <Button
         variant="outline"
-        color="danger"
+        onClick={() => dispatch({ type: 'REMOVE_TODO', payload: todo.id })}
         className="ml-4"
       >
         Remove
       </Button>
-
-        
     </div>
-  )
+  );
 }
 
-export default  TodoItem
+export default TodoItem;

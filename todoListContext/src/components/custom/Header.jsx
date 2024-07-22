@@ -28,11 +28,10 @@ const choices = [
 
 function Header() {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
   const [todoFormOpen, setTodoFormOpen] = useState(false);
   const [newTodo, setNewTodo] = useState("");
 
-  const { dispatch } = useContext(TodoContext);
+  const { dispatch, state } = useContext(TodoContext);
 
   const addTodo = () => {
     dispatch({ type: 'ADD_TODO', payload: newTodo });
@@ -44,7 +43,7 @@ function Header() {
     <div className="flex justify-between items-center p-4">
       <AlertDialog open={todoFormOpen} onOpenChange={setTodoFormOpen}>
         <AlertDialogTrigger asChild>
-          <Button variant="primary">Add</Button>
+          <Button variant="outline">Add</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -87,9 +86,7 @@ function Header() {
             aria-expanded={open}
             className="w-[200px] justify-between"
           >
-            {value
-              ? choices.find((choice) => choice.value === value)?.label
-              : choices[0].label}
+            {choices.find((choice) => choice.value === state.filter)?.label || choices[0].label}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -99,14 +96,14 @@ function Header() {
               key={choice.value}
               className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
               onClick={() => {
-                setValue(choice.value === value ? "" : choice.value);
+                dispatch({ type: 'SET_FILTER', payload: choice.value });
                 setOpen(false);
               }}
             >
               <Check
                 className={cn(
                   "mr-2 h-4 w-4",
-                  value === choice.value ? "opacity-100" : "opacity-0"
+                  state.filter === choice.value ? "opacity-100" : "opacity-0"
                 )}
               />
               {choice.label}

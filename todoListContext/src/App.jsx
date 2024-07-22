@@ -9,7 +9,7 @@ function App() {
 
   return (
 
-      <div className='container'>
+      <div className='max-w-md mx-auto mt-8'>
         <TodoProvider>
           <Header/>
           <TodoList/>
